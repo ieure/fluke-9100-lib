@@ -1,0 +1,37 @@
+!
+! Utility program.
+!
+! Author: Ian Eure <ian@retrospec.tv>
+!
+! Test ROMs using signatures from rom_sig_file.
+!
+! The file should be in the format:
+! $ssss $eeee $gggggggg REF
+!
+! Where $ssss is the start address of the ROM; $eeee is the end;
+! $gggggggg is its CRC32, and REF is its ref.
+!
+
+program u_testroms(rom_sig_file)
+    declare
+        string rom_sig_file
+        string ref = ""
+        numeric saddr = 0
+        numeric eaddr = 0
+        numeric crc = 0
+        numeric fd
+    end declare
+
+    fd = open device rom_sig_file, as "input", mode "buffered"
+
+    loop until (poll channel fd, event "input") = 0
+        input using "$%%%% $%%%% $%%%%%%%% ?#\nl", on fd, saddr, eaddr, crc, ref
+        testing(ref)
+        if testromcrc(saddr, eaddr, crc) fails then
+            fail(ref)
+        else
+            pass(ref)
+        end if
+    end loop
+    close channel fd
+end program

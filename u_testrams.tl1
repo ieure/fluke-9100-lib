@@ -1,0 +1,46 @@
+!
+! Utility program.
+!
+! Author: Ian Eure <ian@retrospec.tv>
+!
+! Test RAMs using definitions from ram_def_file.
+!
+! The file should be in the format:
+! $ssss $eeee $mm REF
+!
+! Where $ssss is the start address of the RAM; $eeee is the end;
+! $mm is the mask, and REF is its ref.
+!
+
+program u_testrams(ram_def_file, mode)
+    declare
+        string ram_def_file
+        string mode = "fast"
+        string ref = ""
+        numeric saddr = 0
+        numeric eaddr = 0
+        numeric mask = $FF
+        numeric fd
+    end declare
+
+    fd = open device ram_def_file, as "input", mode "buffered"
+
+    loop until (poll channel fd, event "input") = 0
+        input using "$%%%% $%%%% $%% ?#\nl", on fd, saddr, eaddr, mask, ref
+        testing(ref)
+        if mode = "fast" then
+            if testramfast addr saddr, upto eaddr, mask mask, addrstep 1 fails then
+                fail(ref)
+            else
+                pass(ref)
+            end if
+        else
+            if testramfull addr saddr, upto eaddr, mask mask, addrstep 1 fails then
+                fail(ref)
+            else
+                pass(ref)
+            end if
+        end if
+    end loop
+    close channel fd
+end program

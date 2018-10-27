@@ -1,0 +1,34 @@
+!
+! Utility program
+!
+! Author: Ian Eure <ian@retrospec.tv>
+!
+! Test a ROM using CRC-32.
+!
+! This program works like testrom(), but uses CRC-32 instead of the
+! undocumented native signature algorithm.  It depends on getcrc().
+!
+! The default addrstep is 1, instead of 2 for testrom().
+!
+! It can be used from TL/1 or the operator's keypad.
+!
+
+program testromcrc(addr, upto, mask, addrstep, crc)
+    declare
+        numeric addr
+        numeric upto
+        numeric mask = $FF
+        numeric addrstep = 1
+        numeric crc
+        numeric cksum
+    end declare
+
+    cksum = getcrc(addr, upto, mask, addrstep)
+    if cksum = crc then
+        return
+    end if
+
+    if diagnoserom(addr, upto, mask, addrstep) passes then
+        fault rom_sig_incorrect addr
+    end if
+end program

@@ -1,0 +1,19 @@
+! Utility program.
+!
+! Author: Ian Eure <ian@retrospec.tv>
+!
+! Indicate that part(s) passed testing.
+!
+
+program pass(refs)
+    declare
+        string refs
+        global numeric uutwin
+        global numeric msgwin
+    end declare
+
+    define ref refs, mode "passed"
+    if uutwin <> 0 then draw ref refs, channel uutwin
+    if msgwin <> 0 then print on msgwin, "PASS: ", refs
+end program
+

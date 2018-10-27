@@ -1,0 +1,13 @@
+! Utility program.
+!
+! Author: Ian Eure <ian@retrospec.tv>
+!
+! This defines the modes for different parts and their video
+! attributes.
+
+program defmodes
+    define mode "passed",   attribute "bold"
+    define mode "failed",   attribute "inverse"
+    define mode "testing",  attribute "blink"
+    define mode "untested", attribute "normal"
+end program

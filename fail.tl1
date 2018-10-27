@@ -1,0 +1,19 @@
+! Utility program.
+!
+! Author: Ian Eure <ian@retrospec.tv>
+!
+! Indicate that part(s) failed testing.
+!
+
+program fail(refs)
+    declare
+        string refs
+        global numeric uutwin
+        global numeric msgwin
+    end declare
+
+    define ref refs, mode "failed"
+    if uutwin <> 0 then draw ref refs, channel uutwin
+    if msgwin <> 0 then print on msgwin, "FAIL: ", refs
+end program
+
