@@ -13,7 +13,7 @@
 
 program getcrc(addr, upto, mask, addrstep)
     declare
-        numeric array[0:255] ctbl
+        numeric array[0:255] ctbl ! CRC table
         numeric addr
         numeric upto
         numeric mask = $FF
@@ -283,10 +283,9 @@ program getcrc(addr, upto, mask, addrstep)
 
     a = addr
     loop while a <= upto
-        i = crc xor ((read addr a) & mask)
+        i = (crc xor ((read(a)) & mask)) & $FF
         crc = (crc shr 8) xor ctbl[i]
         a = a + addrstep
     end loop
-    crc = crc xor $FFFFFFFF
-    return crc
+    return crc xor $FFFFFFFF
 end program
