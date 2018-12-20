@@ -13,6 +13,6 @@
    fills up.  The `pv(1)` command can be used to limit the send rate to
    something the Fluke can handle:
 
-   ```shell
-   $ pv -q -L 240 filename.tl1
-   ```
+#+BEGIN_SRC shell -n -r
+$ pv -q -L 240 filename.tl1
+#+END_SRC
